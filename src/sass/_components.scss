@@ -1,0 +1,44 @@
+@use './base' as *;
+
+a.btn,
+button.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+
+	&:focus {
+		outline-style: solid;
+		outline-color: transparent;
+	}
+}
+
+.btn {
+	padding: 0.75em 1.75em;
+	font-size: $fs-18;
+	color: $clr-neutral-100;
+	font-weight: $fw-semibold;
+	line-height: $fs-28;
+	border-radius: 2rem;
+	transition: 0.3s background-color, 0.3s color;
+
+	&-dark {
+		background-color: $clr-primary-400;
+	}
+
+	&-gradient-1 {
+		background: $clr-gradient-primary;
+	}
+
+	&-gradient-2 {
+		background: $clr-gradient-secondary;
+	}
+
+	&:focus {
+		box-shadow: 0 0 0 4px scale-color($clr-focus-400);
+	}
+
+	&:hover {
+		opacity: 0.65;
+	}
+}

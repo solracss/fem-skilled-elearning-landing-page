@@ -1,0 +1,204 @@
+@use 'sass:math';
+@use 'sass:map';
+
+// functions
+@function remSize($size) {
+	$remSize: math.div($size, 16px);
+	@return #{$remSize}rem;
+}
+
+// mixins
+@mixin setHslaColor($property, $hslcolor, $alpha: 1) {
+	#{$property}: hsla(
+		hue($hslcolor),
+		saturation($hslcolor),
+		lightness($hslcolor),
+		$alpha
+	);
+}
+
+@mixin pseudo($type: before, $pos: absolute, $content: '') {
+	position: relative;
+	&::#{$type} {
+		content: $content;
+		position: $pos;
+		@content;
+	}
+}
+
+$breakpoints: (
+	small: remSize(640px),
+	medium: remSize(768px),
+	large: remSize(1024px),
+	x-large: remSize(1280px),
+);
+
+@mixin media($size) {
+	@if map.has-key($breakpoints, $size) {
+		$breakpoint: map-get($breakpoints, $size);
+		@media screen and (min-width: $breakpoint) {
+			@content;
+		}
+	} @else {
+		@error 'the keyword #{$size} is not in the $breakpoints map';
+	}
+}
+
+@mixin media-down($size) {
+	@if map.has-key($breakpoints, $size) {
+		$breakpoint: map-get($breakpoints, $size);
+		@media screen and (max-width: $breakpoint) {
+			@content;
+		}
+	} @else {
+		@error 'the keyword #{$size} is not in the $breakpoints map';
+	}
+}
+
+// colors
+$clr-neutral-100: hsl(0, 0%, 100%);
+
+$clr-primary-200: hsl(232, 10%, 56%);
+$clr-primary-300: hsl(234, 25%, 52%);
+$clr-primary-400: hsl(233, 54%, 16%);
+
+$clr-accent-300: hsl(341, 100%, 83%);
+$clr-accent-400: hsl(341, 92%, 62%);
+
+$clr-gradient-primary: linear-gradient(180deg, #ff6f48 0, #f02aa6 100%);
+$clr-gradient-secondary: linear-gradient(180deg, #4851ff 0, #f02aa6 100%);
+$clr-gradient-main-page: linear-gradient(180deg, #fff 0%, #f0f1ff 100%);
+
+$clr-focus-400: hsl(202, 100%, 50%);
+
+$colors: (
+	'neutral': (
+		'100': $clr-neutral-100,
+	),
+	'primary': (
+		'200': $clr-primary-200,
+		'300': $clr-primary-300,
+		'400': $clr-primary-400,
+	),
+	'accent': (
+		'300': $clr-accent-300,
+		'400': $clr-accent-400,
+	),
+);
+
+// typography
+$ff-base: 'Jakarta';
+
+$fw-regular: 500;
+$fw-semibold: 700;
+$fw-bold: 800;
+
+@font-face {
+	font-family: $ff-base;
+	src: url('/assets/fonts/PlusJakartaSans.woff2') format('woff2-variations');
+}
+
+$fs-11: 0.6875rem;
+$fs-12: 0.75rem;
+$fs-13: 0.8125rem;
+$fs-14: 0.875rem;
+$fs-16: 1rem;
+$fs-18: 1.125rem;
+$fs-20: 1.25rem;
+$fs-24: 1.5rem;
+$fs-28: 1.75rem;
+$fs-32: 2rem;
+$fs-40: 2.5rem;
+$fs-48: 3rem;
+$fs-50: 3.125rem;
+$fs-56: 3.5rem;
+$fs-60: 3.75rem;
+$fs-64: 4rem;
+$fs-80: 5rem;
+
+$font-sizes: (
+	'11': 0.6875rem,
+	'12': 0.75rem,
+	'13': 0.8125rem,
+	'14': 0.875rem,
+	'16': 1rem,
+	'18': 1.125rem,
+	'20': 1.25rem,
+	'24': 1.5rem,
+	'28': 1.75rem,
+	'32': 2rem,
+	'40': 2.5rem,
+	'48': 3rem,
+	'56': 3.5rem,
+	'60': 3.75rem,
+	'64': 4rem,
+	'80': 5rem,
+);
+
+// utility classes
+
+@each $size-name, $size-value in $font-sizes {
+	.fs-#{$size-name} {
+		font-size: #{$size-value};
+	}
+}
+
+.fw-regular {
+	font-weight: $fw-regular;
+}
+
+.fw-bold {
+	font-weight: $fw-bold;
+}
+
+@each $color, $shade-map in $colors {
+	@each $shade, $value in $shade-map {
+		.clr-#{$color}-#{$shade} {
+			color: $value;
+		}
+		.bg-#{$color}-#{$shade} {
+			background-color: $value;
+		}
+	}
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.container {
+	$max-width: 1110px;
+	$padding: 1rem;
+
+	width: min(100% - $padding * 2, $max-width);
+	margin-inline: auto;
+}
+
+.flex-flow {
+	display: flex;
+
+	&.flex-center {
+		justify-content: center;
+	}
+
+	&.flex-space-between {
+		justify-content: space-between;
+	}
+}
+
+.grid-flow {
+	display: grid;
+	gap: 1rem;
+}
